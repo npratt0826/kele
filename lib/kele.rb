@@ -11,6 +11,10 @@ module Kele
 
   end
 
+  def get_me(email, password)
+    response = self.class.get(api_url("users/me"), headers: {"authorization" => @auth_token})
+  end
+
 
   private
 
