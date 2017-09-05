@@ -4,6 +4,7 @@ require 'json'
 
 class Kele
   include HTTParty
+  attr_reader :user
 
   base_uri "https://www.bloc.io/api/v1/"
 
@@ -16,7 +17,20 @@ class Kele
   def get_me
     response = self.class.get(api_url("users/me"), headers: {"authorization" => @auth_token})
     @user = JSON.parse(response.body)
-    @user_id = @user["id"]
+    # @user_id = @user["id"]
+  end
+
+  def get_mentor_availability(id)
+    response = self.class.get(api_url("mentors/#{id}/student_availability"), headers: { :authorization => @auth_token } )
+    available = []
+    response.each do |timeslot|
+      if timeslot["booked"] == nil
+        # available >> timeslot
+        available.push(timeslot)
+      end
+    end
+    # puts available.inspect
+    puts available
   end
 
 
