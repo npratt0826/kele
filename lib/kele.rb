@@ -33,6 +33,16 @@ class Kele
     puts available
   end
 
+  def get_roadmap(id)
+    response = self.class.get(api_url("roadmaps/#{id}"), headers: { :authorization => @auth_token } )
+
+  end
+
+  def get_checkpoint(checkpoint_id)
+    response = self.class.get(api_url("checkpoints/#{checkpoint_id}"), headers: { :authorization => @auth_token } )
+  end
+
+
 
   private
 
