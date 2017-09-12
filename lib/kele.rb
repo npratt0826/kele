@@ -1,12 +1,12 @@
 
 require 'httparty'
 require 'json'
-require 'roadmap'
+require_relative './roadmap'
 
 class Kele
   include HTTParty
   include Roadmap
-  attr_reader :user
+  attr_reader :user, :current_enrollment
 
   base_uri "https://www.bloc.io/api/v1/"
 
@@ -14,11 +14,13 @@ class Kele
     response = self.class.post(api_url("sessions"), body: {"email": email, "password": password})
     raise 'Invalid email or password' if response.code == 404
     @auth_token = response["auth_token"]
+    get_me
   end
 
   def get_me
     response = self.class.get(api_url("users/me"), headers: {"authorization" => @auth_token})
     @user = JSON.parse(response.body)
+    @current_enrollment = @user['current_enrollment']
     # @user_id = @user["id"]
   end
 

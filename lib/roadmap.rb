@@ -16,6 +16,8 @@ module Roadmap
     @checkpoint = JSON.parse(response.body)
   end
 
+  private
+
   def api_url(endpoint)
     "https://www.bloc.io/api/v1/#{endpoint}"
   end
