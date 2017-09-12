@@ -7,7 +7,7 @@ module Roadmap
   base_uri "https://www.bloc.io/api/v1/"
 
   def get_roadmap
-    response = self.class.get(api_url("roadmaps/#{"current_enrollment"['roadmap_id']}"), headers: { :authorization => @auth_token } )
+    response = self.class.get(api_url("roadmaps/#{current_enrollment['roadmap_id']}"), headers: { :authorization => @auth_token } )
     @roadmap = JSON.parse(response.body)
   end
 
