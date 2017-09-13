@@ -48,7 +48,12 @@ class Kele
 
   end
 
-  def create_message
+  def create_message(token = nil, subject, stripped)
+    if token == nil
+      response = self.class.post(api_url('messages'), body: { sender: @user['email'], recipient_id: @user['mentor_id'], subject: subject, stripped: stripped }, headers: { authorization: @auth_token} )
+    else
+      response = self.class.post(api_url('messages'), body: { sender: @user['email'], recipient_id: @user['mentor_id'], token: token, subject: subject, stripped: stripped }, headers: { authorization: @auth_token} )
+    end
 
   end
 
