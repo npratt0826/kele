@@ -6,7 +6,7 @@ require_relative './roadmap'
 class Kele
   include HTTParty
   include Roadmap
-  attr_reader :user, :current_enrollment
+  attr_reader :user, :current_enrollment, :messages
 
   base_uri "https://www.bloc.io/api/v1/"
 
@@ -35,6 +35,21 @@ class Kele
     end
     # puts available.inspect
     puts available
+  end
+
+  def get_messages(page_num = nil)
+    if page_num == nil
+      response = self.class.get(api_url('message_threads'), headers: { authorization: @auth_token } )
+      @messages = JSON.parse(response.body)
+    else
+      response = self.class.get(api_url('message_threads'), body: { page: page_num }, headers: { :authorization => @auth_token })
+      @messages = JSON.parse(response.body)
+    end
+
+  end
+
+  def create_message
+
   end
 
   private
