@@ -6,7 +6,7 @@ require_relative './roadmap'
 class Kele
   include HTTParty
   include Roadmap
-  attr_reader :user, :current_enrollment, :messages
+  attr_reader :user, :current_enrollment, :messages, :email
 
   base_uri "https://www.bloc.io/api/v1/"
 
@@ -21,7 +21,11 @@ class Kele
     response = self.class.get(api_url("users/me"), headers: {"authorization" => @auth_token})
     @user = JSON.parse(response.body)
     @current_enrollment = @user['current_enrollment']
-    # @user_id = @user["id"]
+    @email = @user['email']
+    @mentor = @current_enrollment['mentor_id']
+    @user_id = @user["id"]
+    @user
+
   end
 
   def get_mentor_availability(id)
@@ -33,7 +37,7 @@ class Kele
         available.push(timeslot)
       end
     end
-    # puts available.inspect
+    # puts available.inspect1`
     puts available
   end
 
@@ -50,9 +54,9 @@ class Kele
 
   def create_message(token = nil, subject, stripped)
     if token == nil
-      response = self.class.post(api_url('messages'), body: { sender: @user['email'], recipient_id: @user['mentor_id'], subject: subject, stripped: stripped }, headers: { authorization: @auth_token} )
+      response = self.class.post(api_url('messages'), body: { sender: @email, recipient_id: @mentor, subject: subject, "stripped-text": stripped }, headers: { authorization: @auth_token} )
     else
-      response = self.class.post(api_url('messages'), body: { sender: @user['email'], recipient_id: @user['mentor_id'], token: token, subject: subject, stripped: stripped }, headers: { authorization: @auth_token} )
+      response = self.class.post(api_url('messages'), body: { sender: @email, recipient_id: @mentor, token: token, subject: subject, "stripped-text": stripped }, headers: { authorization: @auth_token} )
     end
 
   end
