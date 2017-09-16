@@ -24,6 +24,7 @@ class Kele
     @email = @user['email']
     @mentor = @current_enrollment['mentor_id']
     @user_id = @user["id"]
+    @enrollment_id = @current_enrollment["id"]
     @user
 
   end
@@ -58,7 +59,10 @@ class Kele
     else
       response = self.class.post(api_url('messages'), body: { sender: @email, recipient_id: @mentor, token: token, subject: subject, "stripped-text": stripped }, headers: { authorization: @auth_token} )
     end
+  end
 
+  def create_submission(assignment_branch, assignment_commit_link, checkpoint_id, comment)
+    response = self.class.post(api_url('checkpoint_submissions'), body: {assignment_branch: assignment_branch, assignment_commit_link: assignment_commit_link, checkpoint_id: checkpoint_id, comment: comment, enrollment_id: @enrollment_id}, headers: { authorization: @auth_token } )
   end
 
   private
